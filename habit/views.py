@@ -1,6 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from habit.models import Habit
 from habit.serializers import HabitSerializer
+from habit.paginations import CustomPagination
 from users.permissions import IsOwner
 
 
@@ -8,6 +9,7 @@ class HabitViewSet(ModelViewSet):
     """Вьюсет для модели Привычка."""
     queryset = Habit.objects.all()
     serializer_class = HabitSerializer
+    pagination_class = CustomPagination
 
     """Метод для управления созданием объекта и автомат привязки создаваемого объекта к авторизованному пользователю."""
     def perform_create(self, serializer):
