@@ -1,6 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import ListAPIView
 from habit.models import Habit
-from habit.serializers import HabitSerializer
+from habit.serializers import HabitSerializer, HabitpublicitySerializer, UserHabitSerializer
 from habit.paginations import CustomPagination
 from users.permissions import IsOwner
 
@@ -24,3 +25,24 @@ class HabitViewSet(ModelViewSet):
         elif self.action == "destroy":
             self.permission_classes = (IsOwner,)
         return super().get_permissions()
+
+
+class HabitpublicityListAPIView(ListAPIView):
+    """Эндпоинт для списка публичных привычек."""
+    serializer_class = HabitpublicitySerializer
+    pagination_class = CustomPagination
+
+    def get_queryset(self):
+        """Метод фильтрует привычки по статусу публикации"""
+        return Habit.objects.filter(publicity="Опубликована", owner=self.request.user)
+
+
+class UserhabitListAPIView(ListAPIView):
+    """Эндпоинт для списка привычек текущего пользователя."""
+    serializer_class = UserHabitSerializer
+    pagination_class = CustomPagination
+
+    def get_queryset(self):
+        """Метод фильтрует привычки по текущему пользователю."""
+        user = self.request.user
+        return Habit.objects.filter(owner=user)
