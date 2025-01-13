@@ -23,6 +23,10 @@ class HabitSerializer(serializers.ModelSerializer):
 class HabitpublicitySerializer(ModelSerializer):
     habitpublicity = SerializerMethodField()
 
+    class Meta:
+        model = Habit
+        fields = "__all__"
+
     def get_habitpublicity(self, obj):
         # Получаем текущего пользователя из контекста
         user = self.context['request'].user
