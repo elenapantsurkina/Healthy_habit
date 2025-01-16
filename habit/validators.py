@@ -4,26 +4,43 @@ from datetime import timedelta
 
 def validator_time(value):
     """Проверяет продолжительность выполнения привычки не более 120 секунд."""
-    if value:
+    if isinstance(value, dict):
+        duration = value.get("duration")
+        if isinstance(duration, (int, float)):
+            value = timedelta(seconds=duration)
+        else:
+            raise ValidationError("Неправильный тип данных. Ожидался объект timedelta или число.")
+
+    if isinstance(value, timedelta):
         if value > timedelta(seconds=120):
             raise ValidationError("Продолжительность выполнения привычки не может быть более 120 секунд")
+    else:
+        raise ValidationError("Неправильный тип данных. Ожидался объект timedelta.")
 
 
 class WeeklyHabitValidator:
     """Проверяет периодичность выполнения привычки раз в 7 дней."""
-    def __call__(self, value):
-        if value.periodicity is not None and value.periodicity > 7:
-            raise ValidationError("Периодичность выполнения привычки не может превышать 7 дней.")
 
-        if value.periodicity is not None and value.periodicity < 1:
+    def __call__(self, value):
+        if isinstance(value, dict):
+            periodicity = value.get('periodicity')
+        else:
+            periodicity = value.periodicity
+
+        if periodicity is None:
+            raise ValidationError("Привычка должна выполняться хотя бы один раз в неделю.")
+
+        if periodicity > 7:
+            raise ValidationError("Периодичность выполнения привычки не может превышать 7 дней.")
+        if periodicity < 1:
             raise ValidationError("Привычка должна выполняться хотя бы один раз в неделю.")
 
 
 class HabitValidator:
     """Проверяет, что не заполнены одновременно поля "связанная привычка" и "вознаграждение"."""
     def __call__(self, value):
-        related_habit = value.related_habit
-        award = value.award
+        related_habit = value.get("related_habit")
+        award = value.get("award")
         if related_habit and award:
             raise ValidationError("Вы можете заполнить только одно из полей:'связанная привычка' или 'вознаграждение'.")
 
@@ -31,15 +48,15 @@ class HabitValidator:
 class PleasantHabitValidator:
     """Проверяет, что связанные привычки могут быть только с признаком "приятной привычки"."""
     def __call__(self, value):
-        if value.related_habit is not None:
-            related_habit = value.related_habit
-            if not related_habit.pleasant_habit:
+        related_habit = value.get("related_habit")
+        if related_habit is not None:
+            if not related_habit.get("pleasant_habit"):
                 raise ValidationError("Связанная привычка должна быть с признаком 'приятной привычки'.")
 
 
 class RelatedHabitValidator:
     """Проверяет, что у приятной привычки не может быть вознаграждения или связанной привычки."""
     def __call__(self, value):
-        if value.pleasant_habit:
-            if value.award or value.related_habit:
+        if value.get("pleasant_habit"):
+            if value.get("award") or value.get("related_habit"):
                 raise ValidationError("У приятной привычки не может быть вознаграждения или связанной привычки.")
