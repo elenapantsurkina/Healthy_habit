@@ -2,20 +2,14 @@ from rest_framework.serializers import ValidationError
 from datetime import timedelta
 
 
-def validator_time(value):
-    """Проверяет продолжительность выполнения привычки не более 120 секунд."""
-    if isinstance(value, dict):
-        duration = value.get("duration")
-        if isinstance(duration, (int, float)):
-            value = timedelta(seconds=duration)
-        else:
-            raise ValidationError("Неправильный тип данных. Ожидался объект timedelta или число.")
+class ValidatorTime:
+    def __init__(self, field):
+        self.field = field
 
-    if isinstance(value, timedelta):
-        if value > timedelta(seconds=120):
-            raise ValidationError("Продолжительность выполнения привычки не может быть более 120 секунд")
-    else:
-        raise ValidationError("Неправильный тип данных. Ожидался объект timedelta.")
+    def __call__(self, value):
+        time = dict(value).get(self.field)
+        if time is not None and time > timedelta(seconds=120):
+            raise ValidationError("Продолжительность выполнения привычки не может быть более 120 секунд.")
 
 
 class WeeklyHabitValidator:
