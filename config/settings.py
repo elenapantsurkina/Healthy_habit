@@ -125,3 +125,7 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
+
+TELEGRAM_URL = "https://api.telegram.org/bot"
+
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
