@@ -7,7 +7,9 @@ from users.models import User
 class UserTestCase(APITestCase):
     def setUp(self):
         """Данные для теста(фикстура для теста)."""
-        self.user = User.objects.create(email="test@test.com",)
+        self.user = User.objects.create(
+            email="test@test.com",
+        )
         self.client.force_authenticate(user=self.user)
 
     def test_user_retrieve(self):
@@ -24,11 +26,7 @@ class UserTestCase(APITestCase):
         response = self.client.get(url)
         data = response.json()
         result = [
-            {
-                "id": self.user.pk,
-                "email": "test@test.com",
-                "tg_chat_id": None
-            },
+            {"id": self.user.pk, "email": "test@test.com", "tg_chat_id": None},
         ]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data, result)

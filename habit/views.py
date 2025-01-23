@@ -1,18 +1,24 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListAPIView
 from habit.models import Habit
-from habit.serializers import HabitSerializer, HabitpublicitySerializer, UserHabitSerializer
+from habit.serializers import (
+    HabitSerializer,
+    HabitpublicitySerializer,
+    UserHabitSerializer,
+)
 from habit.paginations import CustomPagination
 from users.permissions import IsOwner
 
 
 class HabitViewSet(ModelViewSet):
     """Вьюсет для модели Привычка."""
+
     queryset = Habit.objects.all()
     serializer_class = HabitSerializer
     pagination_class = CustomPagination
 
     """Метод для управления созданием объекта и автомат привязки создаваемого объекта к авторизованному пользователю."""
+
     def perform_create(self, serializer):
         habit = serializer.save()
         habit.owner = self.request.user
@@ -29,6 +35,7 @@ class HabitViewSet(ModelViewSet):
 
 class HabitpublicityListAPIView(ListAPIView):
     """Эндпоинт для списка публичных привычек."""
+
     serializer_class = HabitpublicitySerializer
     pagination_class = CustomPagination
 
@@ -39,6 +46,7 @@ class HabitpublicityListAPIView(ListAPIView):
 
 class UserhabitListAPIView(ListAPIView):
     """Эндпоинт для списка привычек текущего пользователя."""
+
     serializer_class = UserHabitSerializer
     pagination_class = CustomPagination
 

@@ -19,7 +19,8 @@ class HabitTestCase(APITestCase):
             periodicity=1,
             award="Вознаграждение",
             publicity="Не опубликована",
-            owner=self.user)
+            owner=self.user,
+        )
         self.client.force_authenticate(user=self.user)
 
     def test_habit_retrieve(self):
@@ -51,10 +52,7 @@ class HabitTestCase(APITestCase):
     def test_habit_update(self):
         """Тестирование изменения привычки."""
         url = reverse("habit:habit-detail", args=(self.habit.pk,))
-        data = {
-            "habit": "Тестовая привычка новая",
-            "periodicity": 1
-        }
+        data = {"habit": "Тестовая привычка новая", "periodicity": 1}
         response = self.client.patch(url, data)
         print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
