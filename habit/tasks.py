@@ -9,7 +9,7 @@ from config import settings
 
 
 @shared_task
-def send_information_telegram(tg_chat_id=422783835):
+def send_information_telegram():
     """Отправляет пользователю напоминание о привычке."""
     time_zone = pytz.timezone(settings.TIME_ZONE)
     current_time = datetime.now(time_zone)
@@ -18,16 +18,7 @@ def send_information_telegram(tg_chat_id=422783835):
     start_time = current_time.time()
     end_time = (datetime.now(time_zone) + timedelta(hours=1)).time()
     habits = Habit.objects.filter(time_habit__range=(start_time, end_time))
-
-    if not habits.exists():
-        return
-
-    try:
-        user = User.objects.get(tg_chat_id=tg_chat_id)
-        print(user)
-    except ObjectDoesNotExist:
-        return f"Пользователь с данным {tg_chat_id} не найден"
-
     for habit in habits:
+        user = habit.owner.tg_chat_id
         message = f"Вам необходимо сделать {habit.action} в {habit.time_habit} в {habit.location}."
-        send_telegram_message(user.tg_chat_id, message)
+        send_telegram_message(user, message)
