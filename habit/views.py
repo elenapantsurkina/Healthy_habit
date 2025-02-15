@@ -17,7 +17,7 @@ class HabitViewSet(ModelViewSet):
     serializer_class = HabitSerializer
     pagination_class = CustomPagination
 
-    """Метод для управления созданием объекта и автомат привязки создаваемого объекта к авторизованному пользователю."""
+    """Метод для управления созданием объекта и автом привязки создаваемого объекта к авторизованному пользователю."""
 
     def perform_create(self, serializer):
         habit = serializer.save()
