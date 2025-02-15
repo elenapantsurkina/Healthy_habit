@@ -2,8 +2,6 @@ from datetime import datetime, timedelta
 
 import pytz
 from celery import shared_task
-from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
 
 from config import settings
 from habit.models import Habit
