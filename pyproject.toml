@@ -23,6 +23,8 @@ redis = "^5.2.1"
 gevent = "^24.11.1"
 pybloom-live = "^4.0.0"
 django-cors-headers = "^4.6.0"
+gunicorn = "^23.0.0"
+django-redis = "^5.4.0"
 
 
 [build-system]
