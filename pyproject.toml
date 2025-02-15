@@ -26,6 +26,7 @@ django-cors-headers = "^4.6.0"
 gunicorn = "^23.0.0"
 django-redis = "^5.4.0"
 isort = "^6.0.0"
+flake8 = "^7.1.1"
 
 
 [build-system]
