@@ -1,12 +1,10 @@
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListAPIView
+from rest_framework.viewsets import ModelViewSet
+
 from habit.models import Habit
-from habit.serializers import (
-    HabitSerializer,
-    HabitpublicitySerializer,
-    UserHabitSerializer,
-)
 from habit.paginations import CustomPagination
+from habit.serializers import (HabitpublicitySerializer, HabitSerializer,
+                               UserHabitSerializer)
 from users.permissions import IsOwner
 
 

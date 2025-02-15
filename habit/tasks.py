@@ -1,11 +1,13 @@
+from datetime import datetime, timedelta
+
+import pytz
 from celery import shared_task
-from habit.services import send_telegram_message
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from habit.models import Habit
-from datetime import datetime, timedelta
-import pytz
+
 from config import settings
+from habit.models import Habit
+from habit.services import send_telegram_message
 
 
 @shared_task

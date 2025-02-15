@@ -1,14 +1,12 @@
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
-from rest_framework import serializers
-from habit.models import Habit
 from datetime import timedelta
-from habit.validators import (
-    WeeklyHabitValidator,
-    ValidatorTime,
-    HabitValidator,
-    PleasantHabitValidator,
-    RelatedHabitValidator,
-)
+
+from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
+
+from habit.models import Habit
+from habit.validators import (HabitValidator, PleasantHabitValidator,
+                              RelatedHabitValidator, ValidatorTime,
+                              WeeklyHabitValidator)
 
 
 class HabitSerializer(serializers.ModelSerializer):
