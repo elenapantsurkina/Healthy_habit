@@ -5,9 +5,6 @@ description = ""
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
-[tool.poetry.packages]
--name = "habit"
- from = "."
 
 [tool.poetry.dependencies]
 python = "^3.12"
