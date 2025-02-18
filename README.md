@@ -62,7 +62,7 @@ CELERY_BROKER_URL,CELERY_RESULT_BACKEND, TELEGRAM_TOKEN
 Подключена и настроена вывод документации для проекта.
 Подключены celery и celery-beat.
 Настроена интеграцию с Телеграмом.
-Настроена CORS.
+Настроена CORS..
 
 
 ## Документация:
