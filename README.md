@@ -28,14 +28,22 @@
 
 ## Установка зависимостей
 ```pip install django```
-
+создайте файл .env и укажите там переменные: SECRET_KEY, NAME,USER_NAME,PASSWORD,HOST, 
+CELERY_BROKER_URL,CELERY_RESULT_BACKEND, TELEGRAM_TOKEN
 
 ## Конфигурация
 Перед запуском проекта убедитесь, что все зависимости установлены и выполнены необходимые конфигурационные шаги
 
 
 ## Использование:
-Для проверки работы выполните команду `python manage.py runserver`
+Для запуска проекта с использованием Docker Compose выполните следующую команду: 'docker-compose up --build'
+Для развертывания проекта на сервере клонируйте репозиторий
+Установите git и docker
+Перенесите из .env все параметры в секреты. 
+Также добавьте : DOCKER_HUB_ACCESS_TOKEN,DOCKER_HUB_USERNAME, SERVER_IP, SSH_KEY, SSH_USER
+Запушьте любой коммит
+
+Для проверки работы приложения на localhost выполните команду `python manage.py runserver`
 
 
 ## Функционал:

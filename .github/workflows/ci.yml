@@ -29,18 +29,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Create .env file
-        run: |
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env
-          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
-          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
-          echo "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}" >> .env
-          echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}" >> .env
-          echo "CELERY_BROKER_URL=${{ secrets.CELERY_BROKER_URL }}" >> .env
-          echo "CELERY_RESULT_BACKEND=${{ secrets.CELERY_RESULT_BACKEND }}" >> .env
-          echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .env
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -54,27 +42,9 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-root
 
-      - name: Set up PostgreSQL
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y postgresql postgresql-contrib
-
-          # Запуск службы PostgreSQL
-          sudo service postgresql start
-
-          # Создание базы данных и пользователя
-          sudo -u postgres psql -c "CREATE DATABASE ${POSTGRES_DB};"
-          sudo -u postgres psql -c "CREATE USER ${POSTGRES_USER} WITH PASSWORD '${POSTGRES_PASSWORD}';"
-          sudo -u postgres psql -c "ALTER ROLE ${POSTGRES_USER} SET client_encoding TO 'utf8';"
-          sudo -u postgres psql -c "ALTER ROLE ${POSTGRES_USER} SET default_transaction_isolation TO 'read committed';"
-          sudo -u postgres psql -c "ALTER ROLE ${POSTGRES_USER} SET timezone TO 'UTC';"
-          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${POSTGRES_DB} TO ${POSTGRES_USER};"    
-
-      - name: Run migrations
-        run: poetry run python manage.py migrate
-
       - name: Run tests
         run: poetry run python manage.py test
+
 
   build:
     needs: test
@@ -83,14 +53,25 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
+      - name: Create .env file
+        run: |
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "NAME_DB=${{ secrets.NAME_DB }}" >> .env
+          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+          echo "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}" >> .env
+          echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}" >> .env
+          echo "CELERY_BROKER_URL=${{ secrets.CELERY_BROKER_URL }}" >> .env
+          echo "CELERY_RESULT_BACKEND=${{ secrets.CELERY_RESULT_BACKEND }}" >> .env
+          echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .env
+
       - name: Log in to Docker Hub
         run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
-      - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} .
-
-      - name: Push Docker image to Docker Hub
-        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+      - name: Build and push Docker images
+        run: |
+          docker compose build
+          docker compose push
 
   deploy:
     needs: build
@@ -103,9 +84,14 @@ jobs:
 
       - name: Deploy to Server
         run: |
-            ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-              docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-              docker stop myapp || true
-              docker rm myapp || true
-              docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-            EOF
+          ssh -T -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+          
+            cd ${{ secrets.DEPLOY_DIR }}
+          
+            docker compose down
+            docker compose pull
+            docker compose up -d --remove-orphans
+          
+            docker image prune -f
+          EOF
