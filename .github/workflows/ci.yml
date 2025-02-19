@@ -53,6 +53,9 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
+      - name: Check SECRET_KEY
+        run: echo "SECRET_KEY is ${{ secrets.SECRET_KEY }}"
+
       - name: Create .env file
         run: |
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
