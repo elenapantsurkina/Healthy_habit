@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-root  # Установка только необходимых зависимостей
       - name: Run Flake8
-        run: flake8 --max-line-length=119 --ignore=E203,W503 --exclude=.git,__pycache__,venv,.venv,migrations .
+        run: poetry run flake8 --max-line-length=119 --ignore=E203,W503 --exclude=.git,__pycache__,venv,.venv,migrations .
 
   test:
     runs-on: ubuntu-latest
