@@ -85,14 +85,15 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.4
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Debug SSH Key
         run: |
-          echo "SSH Key Loaded"
-          ssh-add -l  # Список загруженных ключей    
+          mkdir -p ~/.ssh
+          echo ${{ secrets.SSH_PRIVATE_KEY }} > ~/.ssh/id_rsa
+
+      - name: Check SSH
+        run: |
+          ssh -T git@github.com
+
+
 
       - name: Deploy to Server
         run: |
