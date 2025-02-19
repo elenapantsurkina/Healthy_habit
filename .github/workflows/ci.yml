@@ -89,6 +89,11 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
+      - name: Debug SSH Key
+        run: |
+          echo "SSH Key Loaded"
+          ssh-add -l  # Список загруженных ключей    
+
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
