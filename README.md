@@ -29,7 +29,7 @@
 ## Установка зависимостей
 ```pip install django```
 создайте файл .env и укажите там переменные: SECRET_KEY, NAME,USER_NAME,PASSWORD,HOST, 
-CELERY_BROKER_URL,CELERY_RESULT_BACKEND, TELEGRAM_TOKEN
+CELERY_BROKER_URL,CELERY_RESULT_BACKEND, TELEGRAM_TOKEN.
 
 ## Конфигурация
 Перед запуском проекта убедитесь, что все зависимости установлены и выполнены необходимые конфигурационные шаги
