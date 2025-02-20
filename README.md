@@ -41,7 +41,7 @@ CELERY_BROKER_URL,CELERY_RESULT_BACKEND, TELEGRAM_TOKEN.
 Установите git и docker
 Перенесите из .env все параметры в секреты. 
 Также добавьте : DOCKER_HUB_ACCESS_TOKEN,DOCKER_HUB_USERNAME, SERVER_IP, SSH_KEY, SSH_USER
-Запушьте любой коммит
+Запушьте любой коммит.
 
 Для проверки работы приложения на localhost выполните команду `python manage.py runserver`
 
