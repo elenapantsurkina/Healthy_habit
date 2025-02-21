@@ -51,7 +51,7 @@ sudo apt upgrade
 Развёртывание приложения происходит через Docker, его необходимо установить на сервер,
 действуйте согласно инструкции https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository.
 Проверка и деплой сервера происходит через GitHubActions автоматически. 
-запуск сервера происходит c помощью команды 'docker-compose up --build' автоматически
+запуск сервера происходит c помощью команды 'docker-compose up --build' автоматически.
 
 
 Для проверки работы приложения на localhost выполните команду `python manage.py runserver`
