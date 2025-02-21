@@ -95,7 +95,7 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh-pass -p "${{ secrets.SSH_PRIVATE_KEY }}" ssh -o StrictHostKeyChecking=no {{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cd /home/elena/ && git pull && docker compose down --remove-orphans && docker compose up -d --build"
+          sshpass -p "${{ secrets.SSH_PRIVATE_KEY }}" ssh -o StrictHostKeyChecking=no {{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "cd /home/elena/ && git pull && docker compose down --remove-orphans && docker compose up -d --build"
 #            cd ${{ secrets.DEPLOY_DIR }}
 #
 #            # Проверка существования файла docker-compose.yml
