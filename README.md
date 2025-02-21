@@ -36,12 +36,18 @@ CELERY_BROKER_URL,CELERY_RESULT_BACKEND, TELEGRAM_TOKEN.
 
 
 ## Использование:
-Для запуска проекта с использованием Docker Compose выполните следующую команду: 'docker-compose up --build'
+Удаленный сервер находится по адресу http://158.160.167.2
+Сгенерируйте SSH-ключ и добавьте его в GitHub Secrets.
+Перенесите из .env все параметры в GitHub Secrets. 
+Также добавьте : DOCKER_HUB_ACCESS_TOKEN,DOCKER_HUB_USERNAME, SERVER_IP, SSH_PRIVATE_KEY, SSH_USER
 Для развертывания проекта на сервере клонируйте репозиторий
-Установите git и docker
-Перенесите из .env все параметры в секреты. 
-Также добавьте : DOCKER_HUB_ACCESS_TOKEN,DOCKER_HUB_USERNAME, SERVER_IP, SSH_KEY, SSH_USER
-Запушьте любой коммит
+Развёртывание приложения происходит через Docker, его необходимо установить на сервер.
+Проверка и деплой сервера происходит через GitHubActions автоматически. 
+запуск сервера происходит c помощью команды 'docker-compose up --build' автоматически.
+
+
+
+
 
 Для проверки работы приложения на localhost выполните команду `python manage.py runserver`
 
